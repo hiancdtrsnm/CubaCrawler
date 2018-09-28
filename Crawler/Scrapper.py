@@ -49,11 +49,17 @@ class CubaDebate(ScrapBase):
         #logger.debug(html_text)
 
         soup = BeautifulSoup(html_text, 'lxml')
+        img = None
+        imgb = True
         for item in soup.find_all('div', id=re.compile("^attachment")):
+            if len(item.contents) == 2 and item.contents[0].name=='img' and imgb:
+                imgb = False
+                img = item.contents[0]['src']
             item.decompose()
         ans = soup.find("div", {"class": "note_content"}).text
-        #logger.debug(ans)
-        return ans
+        title = soup.find('h2',{"class": "title"})
+        #logger.debug(img)
+        return {'text':ans,'title':title,'img':img}
 
     def _Comment(self, url, proxy):
         return self._extract_comments(url, proxy)
