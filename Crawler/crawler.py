@@ -39,10 +39,12 @@ class Crawler:
 
     @property
     def comment(self):
-        return self.__scrapper.comment
+        ans = self.__scrapper.comment
+        logger.debug("Extract text {}".format(ans))
+        return ans
 
     @property
-    def text(self):
-        ans = self.__scrapper.text
+    def data(self):
+        ans = self.__scrapper.data
         logger.debug("Extract text {}".format(ans))
         return ans

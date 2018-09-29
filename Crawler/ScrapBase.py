@@ -1,3 +1,9 @@
+class UnreachebleURL:
+    pass
+
+class ProxyConfigError:
+    pass
+
 class ScrapBase:
     def __init__(self,url,proxy=None):
         self.__comment = None
@@ -28,7 +34,7 @@ class ScrapBase:
         return self.__comment
 
     @property
-    def text(self):
+    def data(self):
         if self.__text:
             return self.__text
 

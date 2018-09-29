@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
+from urllib3.exceptions import LocationParseError
 try:
-    from .ScrapBase import ScrapBase
+    from .ScrapBase import ScrapBase, UnreachebleURL, ProxyConfigError
 except (ModuleNotFoundError,ImportError):
-    from ScrapBase import ScrapBase
+    from ScrapBase import ScrapBase, UnreachebleURL, ProxyConfigError
 import requests
 import re
 import logging
@@ -29,10 +30,18 @@ class CubaDebate(ScrapBase):
         try:
             response = requests.get(url, proxies=proxy)
         except Exception as e:
-            try:
-                response = requests.get(url, proxies=proxy['http'])
-            except Exception as e:
+            if isinstance(e, LocationParseError):
+                try:
+                    response = requests.get(url, proxies=proxy['http'])
+                except Exception as e:
+                    if isinstance(e, LocationParseError):
+                        logger.debug(e)
+                        raise ProxyConfigError
+                    logger.debug(e)
+                    raise UnreachebleURL
+            else:
                 logger.debug(e)
+                raise UnreachebleURL
         #logger.debug(response)
         response.encoding = 'utf-8'
         if response.status_code != 200:
@@ -56,10 +65,27 @@ class CubaDebate(ScrapBase):
                 imgb = False
                 img = item.contents[0]['src']
             item.decompose()
-        ans = soup.find("div", {"class": "note_content"}).text
-        title = soup.find('h2',{"class": "title"})
+        ans = soup.find("div", {"class": "note_content"}).text.strip().replace('\n',' ')
+        title = soup.find('h2',{"class": "title"}).text
+        por = None
+        ff = re.compile('[Pp]or *?\:')
+        for item in soup.find_all('strong'):
+            try:
+                a = str(item.text)
+                a = a.strip()
+                if ff.search(a):
+                    por = item
+                    break
+            except Exception as e:
+                logger.debug(e)
+        if por:
+            tt = por.parent.find('a')
+            if tt:
+                por = tt.text
+            else:
+                por = None
         #logger.debug(img)
-        return {'text':ans,'title':title,'img':img}
+        return {'text':ans,'title':title,'img':img, 'author':por}
 
     def _Comment(self, url, proxy):
         return self._extract_comments(url, proxy)
