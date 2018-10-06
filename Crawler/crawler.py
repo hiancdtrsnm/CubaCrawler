@@ -33,14 +33,15 @@ class Crawler:
                 self.__scrapper = scrapper(url,self.__proxy)
                 break
         else:
-            raise Exception("Not implemented scrapper")
+            self.__scrapper = scrapper(url, self.__proxy)
+            #raise Exception("Not implemented scrapper")
 
         #logger.debug("Instanced scraper {}".format(self.__scrapper))
 
     @property
     def comment(self):
         ans = self.__scrapper.comment
-        logger.debug("Extract text {}".format(ans))
+        logger.debug("Extract commet {}".format(ans))
         return ans
 
     @property

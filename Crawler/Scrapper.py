@@ -22,8 +22,13 @@ from datetime import datetime
 logger = logging.getLogger('scrapper')
 logging.basicConfig(level=logging.DEBUG)
 
+sps = re.compile('  +')
 
 class CubaDebate(ScrapBase):
+
+    def __init__(self,url,proxy=None):
+        super().__init__(url,proxy)
+        self.__html_text = None
 
     def _request_html(self, url, proxy):
         #logger.debug('_request_html {}, {}'.format(type(url), type(proxy)))
@@ -54,10 +59,11 @@ class CubaDebate(ScrapBase):
         only the desired new text
         """
         #logger.debug('_Scrap params {}, {}'.format(url,proxy))
-        html_text = self._request_html(url, proxy)
+        if self.__html_text is None:
+            self.__html_text = self._request_html(url, proxy)
         #logger.debug(html_text)
 
-        soup = BeautifulSoup(html_text, 'lxml')
+        soup = BeautifulSoup(self.__html_text, 'lxml')
         img = None
         imgb = True
         for item in soup.find_all('div', id=re.compile("^attachment")):
@@ -95,8 +101,9 @@ class CubaDebate(ScrapBase):
         Retorna una lista de diccionarios que contienen el texto
         de los comentarios y la fecha en que se hicieron.
         """
-        html = self._request_html(url, proxy)
-        soup = BeautifulSoup(html, 'html.parser')
+        if self.__html_text is None:
+            self.__html_text = self._request_html(url, proxy)
+        soup = BeautifulSoup(self.__html_text, 'lxml')
 
         # buscar la seccion de los comentarios
         comments_section = soup.find('section', id='comments')
@@ -106,45 +113,25 @@ class CubaDebate(ScrapBase):
         if comments_section is None:
             return []
 
-        # obtener el texto de los comentarios
-        comments = self._get_comments_info(comments_section)
-        # obtener la direccion para mas comentarios
-        new_request = comments_section.find(
-            'a', attrs={'class': 'pscroll_next'})
-
-        while new_request != None:  # comprobar obtener mas comentarios
-            new_url = new_request.get('data-href')
-            new_html = self._request_html(new_url, proxy)
-            new_soup = BeautifulSoup(new_html, 'html.parser')
-
-            comments += self._get_comments_info(new_soup)
-            new_request = new_soup.find('a', attrs={'class': 'pscroll_next'})
+        comments = []
+        proc_com = comments_section.find_all(
+            'li', attrs={'id': re.compile('comment')})
+        for i in proc_com:
+            data = i.contents[0].contents[0]
+            tt = {}
+            for j in data.children:
+                if j.name == 'cite':
+                    tt['author'] = str(j.contents[0].get_text())
+                elif j.name == 'p':
+                    temp = str(j.get_text()).strip()
+                    temp = temp.replace('\n',' ')
+                    temp = sps.sub(' ',temp)
+                    tt['text'] = temp
+                elif j.name == 'div' and j['class'] == 'commentmetadata':
+                    tt['date'] = self._convert_to_datetime(j.get_text().strip())
+            comments.append(tt)
 
         return comments
-
-    def _get_comments_info(self, soup):
-        if soup is None:
-            return []
-
-        comments_info = []
-        # seleccionar todos los tag <li>, clase coments
-        comments_list = soup.find_all(
-            'li', attrs={'id': re.compile('comment')})
-        dict_comments = {}
-        for comment in comments_list:
-            if comment.ul != None:  # solamente tomar el comentario, no las respuestas a este
-                comment.ul.extract()
-
-            # obtener todas las etiquetas <p> del comentario
-            tags_p = comment.find_all('p')
-            date = comment.find('div', class_='commentmetadata')
-            # concatenar el texto de todos los tags <p> del comentario
-            dict_comments['text'] = ''.join(tag.get_text() for tag in tags_p)
-            dict_comments['date'] = self._convert_to_datetime(date.get_text().strip())
-
-            comments_info.append(dict_comments)
-
-        return comments_info
 
     def _convert_to_datetime(self, date_string):
         """
