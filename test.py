@@ -21,8 +21,9 @@ c = Crawler()
 #print(text)
 #print(comment)
 
-c.request('http://127.0.0.1:8000/El fallo de La Haya: La hora de la política y la diplomacia | Cubadebate.html')
+c.request('http://www.cubadebate.cu/noticias/2017/11/25/comparte-tu-tributo-a-fidel/#.W7tghhQpDeM')
 text = c.data
 comment = c.comment
+print(len(comment))
 #print(text)
 #print(comment)

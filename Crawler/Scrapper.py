@@ -23,6 +23,9 @@ logger = logging.getLogger('scrapper')
 logging.basicConfig(level=logging.DEBUG)
 
 sps = re.compile('  +')
+comm = re.compile('comment')
+attach = re.compile("^attachment")
+authorsplit = re.compile('[Pp]or *?\:')
 
 class CubaDebate(ScrapBase):
 
@@ -66,15 +69,14 @@ class CubaDebate(ScrapBase):
         soup = BeautifulSoup(self.__html_text, 'lxml')
         img = None
         imgb = True
-        for item in soup.find_all('div', id=re.compile("^attachment")):
-            if len(item.contents) == 2 and item.contents[0].name=='img' and imgb:
-                imgb = False
-                img = item.contents[0]['src']
-            item.decompose()
-        ans = soup.find("div", {"class": "note_content"}).text.strip().replace('\n',' ')
+        ans = soup.find("div", {"class": "note_content"})
+        img = ans.find("img")
+        if img:
+            img = img['src']
+        ans = ans.text.strip().replace('\n',' ')
         title = soup.find('h2',{"class": "title"}).text
         por = None
-        ff = re.compile('[Pp]or *?\:')
+        ff = authorsplit
         for item in soup.find_all('strong'):
             try:
                 a = str(item.text)
@@ -115,7 +117,7 @@ class CubaDebate(ScrapBase):
 
         comments = []
         proc_com = comments_section.find_all(
-            'li', attrs={'id': re.compile('comment')})
+            'li', attrs={'id': comm})
         for i in proc_com:
             data = i.contents[0].contents[0]
             tt = {}
@@ -130,6 +132,31 @@ class CubaDebate(ScrapBase):
                 elif j.name == 'div' and j['class'] == 'commentmetadata':
                     tt['date'] = self._convert_to_datetime(j.get_text().strip())
             comments.append(tt)
+
+        new_request = comments_section.find(
+            'a', attrs={'class': 'pscroll_next'})
+        while new_request != None:  # comprobar obtener mas comentarios
+            new_url = new_request.get('data-href')
+            new_html = self._request_html(new_url, proxy)
+            new_soup = BeautifulSoup(new_html, 'lxml')
+            proc_com = new_soup.find_all(
+            'li', attrs={'id': comm})
+            for i in proc_com:
+                data = i.contents[0].contents[0]
+                tt = {}
+                for j in data.children:
+                    if j.name == 'cite':
+                        tt['author'] = str(j.contents[0].get_text())
+                    elif j.name == 'p':
+                        temp = str(j.get_text()).strip()
+                        temp = temp.replace('\n',' ')
+                        temp = sps.sub(' ',temp)
+                        tt['text'] = temp
+                    elif j.name == 'div' and j['class'] == 'commentmetadata':
+                        tt['date'] = self._convert_to_datetime(j.get_text().strip())
+                comments.append(tt)
+            new_request = new_soup.find(
+                'a', attrs={'class': 'pscroll_next'})
 
         return comments
 
