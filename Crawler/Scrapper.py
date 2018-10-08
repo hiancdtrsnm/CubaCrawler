@@ -24,8 +24,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 sps = re.compile('  +')
 comm = re.compile('comment')
-attach = re.compile("^attachment")
-authorsplit = re.compile('[Pp]or *?\:')
+#attach = re.compile("^attachment")
+#authorsplit = re.compile('[Pp]or *?\:')
 
 class CubaDebate(ScrapBase):
 
@@ -74,25 +74,10 @@ class CubaDebate(ScrapBase):
         if img:
             img = img['src']
         ans = ans.text.strip().replace('\n',' ')
-        title = soup.find('h2',{"class": "title"}).text
-        por = None
-        ff = authorsplit
-        for item in soup.find_all('strong'):
-            try:
-                a = str(item.text)
-                a = a.strip()
-                if ff.search(a):
-                    por = item
-                    break
-            except Exception as e:
-                logger.debug(e)
+        por = soup.find("span",{"class":"extraauthor"})
         if por:
-            tt = por.parent.find('a')
-            if tt:
-                por = tt.text
-            else:
-                por = None
-        #logger.debug(img)
+            por = por.get_text()
+        title = soup.find('h2',{"class": "title"}).text
         return {'text':ans,'title':title,'img':img, 'author':por}
 
     def _Comment(self, url, proxy):

@@ -21,9 +21,13 @@ c = Crawler()
 #print(text)
 #print(comment)
 
-c.request('http://www.cubadebate.cu/noticias/2017/11/25/comparte-tu-tributo-a-fidel/#.W7tghhQpDeM')
-text = c.data
-comment = c.comment
-print(len(comment))
+# c.request('http://www.cubadebate.cu/noticias/2017/11/25/comparte-tu-tributo-a-fidel/#.W7tghhQpDeM')
+# text = c.data
+# comment = c.comment
+# print(len(comment))
 #print(text)
 #print(comment)
+
+c.request('http://www.cubadebate.cu/noticias/2018/10/08/michael-continua-intensificandose-sobre-el-noroeste-del-caribe/#.W7tu8hQpDeM')
+text = c.data
+comment = c.comment
