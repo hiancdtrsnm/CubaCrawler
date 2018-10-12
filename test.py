@@ -1,13 +1,13 @@
 from Crawler.crawler import Crawler
-#from auth import config
+from auth import config
 
 #config = {
 #    "proxy": "http://user:password@proxy.host:port"
 #    }
 
 
-#c = Crawler(config)
-c = Crawler()
+c = Crawler(config)
+#c = Crawler()
 #
 # c.request("http://www.cubadebate.cu/noticias/2018/09/26/fundada-la-primera-empresa-biotecnologica-cubano-estadounidense-innovative-immunotherapy-alliance-sa/")
 # text = c.data

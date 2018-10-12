@@ -114,7 +114,7 @@ class CubaDebate(ScrapBase):
                     temp = temp.replace('\n',' ')
                     temp = sps.sub(' ',temp)
                     tt['text'] = temp
-                elif j.name == 'div' and j['class'] == 'commentmetadata':
+                elif j.name == 'div' and 'commentmetadata' in j['class']:
                     tt['date'] = self._convert_to_datetime(j.get_text().strip())
             comments.append(tt)
 
@@ -137,7 +137,7 @@ class CubaDebate(ScrapBase):
                         temp = temp.replace('\n',' ')
                         temp = sps.sub(' ',temp)
                         tt['text'] = temp
-                    elif j.name == 'div' and j['class'] == 'commentmetadata':
+                    elif j.name == 'div' and 'commentmetadata' in j['class']:
                         tt['date'] = self._convert_to_datetime(j.get_text().strip())
                 comments.append(tt)
             new_request = new_soup.find(
