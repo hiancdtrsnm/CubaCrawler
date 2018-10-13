@@ -33,6 +33,9 @@ class CubaDebate(ScrapBase):
         super().__init__(url,proxy)
         self.__html_text = None
 
+    def _Source(self):
+        return "CubaDebate"
+
     def _request_html(self, url, proxy):
         #logger.debug('_request_html {}, {}'.format(type(url), type(proxy)))
         try:

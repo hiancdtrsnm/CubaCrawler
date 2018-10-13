@@ -23,6 +23,13 @@ class ScrapBase:
     def _Comment(self,url,proxy=None):
         raise NotImplementedError
 
+    @property
+    def source(self):
+        return self._Source()
+
+    def _Source(self):
+        raise NotImplementedError
+
 
     @property
     def comment(self):

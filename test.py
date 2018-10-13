@@ -31,3 +31,4 @@ c = Crawler(config)
 c.request('http://www.cubadebate.cu/noticias/2018/10/08/michael-continua-intensificandose-sobre-el-noroeste-del-caribe/#.W7tu8hQpDeM')
 text = c.data
 comment = c.comment
+print(len(comment))

@@ -16,15 +16,32 @@ dic = {'cubadebate' : CubaDebate}
 class Crawler:
     def __init__(self,config={}):
         if isinstance(config,dict):
-            if not ("proxy" in config):
-                config['proxy'] = {}
-            self.__proxy = {
-                'http': config["proxy"],
-                'https': config["proxy"],
-            }
+            if "proxy" in config:
+                self.__proxy = {
+                    'http': config["proxy"],
+                    'https': config["proxy"],
+                }
+            elif 'http' in config or 'https' in config:
+                self.__proxy = {}
+                if 'http' in config and 'https' in config:
+                    self.__proxy = {
+                        'http': config["http"],
+                        'https': config["https"],
+                    }
+                elif 'http' in config:
+                    self.__proxy['http'] = config['http']
+                else:
+                    self.__proxy['https'] = config['https']
+            else:
+                self.__proxy = {}
             self.__scrapper = None
 
         #logger.debug("Created Crawler with config {}".format(config))
+    @property
+    def source(self):
+        if self.__scrapper:
+            return self.__scrapper._Source()
+        return None
 
     def request(self,url):
         self.__scrapper = None
