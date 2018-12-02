@@ -37,7 +37,7 @@ class CubaDebate(ScrapBase):
         return "CubaDebate"
 
     def _request_html(self, url, proxy):
-        # logger.debug('_request_html {}, {}'.format(type(url), type(proxy)))
+        # logger.debug('_request_html {}, {}'.format(url, proxy))
         try:
             response = requests.get(url, proxies=proxy, timeout=10)
         except Exception as e:
@@ -57,6 +57,7 @@ class CubaDebate(ScrapBase):
         # logger.debug(response)
         response.encoding = 'utf-8'
         if response.status_code != 200:
+            logger.debug("bad response estatus")
             raise Exception("received code = %d" % response.status_code)
         return response.text
 
