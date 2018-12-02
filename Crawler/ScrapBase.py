@@ -1,7 +1,7 @@
-class UnreachebleURL:
+class UnreachebleURL(Exception):
     pass
 
-class ProxyConfigError:
+class ProxyConfigError(Exception):
     pass
 
 class ScrapBase:

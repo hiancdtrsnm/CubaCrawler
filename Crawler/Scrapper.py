@@ -37,23 +37,24 @@ class CubaDebate(ScrapBase):
         return "CubaDebate"
 
     def _request_html(self, url, proxy):
-        #logger.debug('_request_html {}, {}'.format(type(url), type(proxy)))
+        # logger.debug('_request_html {}, {}'.format(type(url), type(proxy)))
         try:
-            response = requests.get(url, proxies=proxy)
+            response = requests.get(url, proxies=proxy, timeout=10)
         except Exception as e:
+            # logger.debug(e)
             if isinstance(e, LocationParseError):
                 try:
-                    response = requests.get(url, proxies=proxy['http'])
+                    response = requests.get(url, proxies=proxy['http'], timeout=10)
                 except Exception as e:
                     if isinstance(e, LocationParseError):
                         logger.debug(e)
-                        raise ProxyConfigError
+                        raise ProxyConfigError(e.args[0])
                     logger.debug(e)
-                    raise UnreachebleURL
+                    raise UnreachebleURL(e.args[0])
             else:
                 logger.debug(e)
-                raise UnreachebleURL
-        #logger.debug(response)
+                raise UnreachebleURL(e.args[0])
+        # logger.debug(response)
         response.encoding = 'utf-8'
         if response.status_code != 200:
             raise Exception("received code = %d" % response.status_code)
@@ -71,7 +72,6 @@ class CubaDebate(ScrapBase):
 
         soup = BeautifulSoup(self.__html_text, 'lxml')
         img = None
-        imgb = True
         ans = soup.find("div", {"class": "note_content"})
         img = ans.find("img")
         if img:
@@ -81,7 +81,9 @@ class CubaDebate(ScrapBase):
         if por:
             por = por.get_text()
         title = soup.find('h2',{"class": "title"}).text
-        return {'text':ans,'title':title,'img':img, 'author':por}
+        date = soup.find('time')
+        date = datetime.strptime(date.attrs['datetime'], '%Y-%m-%d %H:%M:%S')
+        return {'text':ans,'title':title,'img':img, 'author':por,"pub_date":date}
 
     def _Comment(self, url, proxy):
         return self._extract_comments(url, proxy)

@@ -47,7 +47,7 @@ class Crawler:
         self.__scrapper = None
         for scrapper in dic.values():
             if scrapper.can_crawl(url):
-                self.__scrapper = scrapper(url,self.__proxy)
+                self.__scrapper = scrapper(url, self.__proxy)
                 break
         else:
             self.__scrapper = scrapper(url, self.__proxy)
