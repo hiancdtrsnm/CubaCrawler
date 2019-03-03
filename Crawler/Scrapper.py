@@ -77,14 +77,32 @@ class CubaDebate(ScrapBase):
         img = ans.find("img")
         if img:
             img = img['src']
-        ans = ans.text.strip().replace('\n',' ')
+        imgfooter = None
+        text = ''
+        fuente = None
+        for i in ans.find_all('p'):
+            att = i.attrs.get('class')
+            if att:
+                for j in att:
+                    if  j== 'wp-caption-text':
+                        imgfooter = i.text.strip()
+                        break
+            else:
+                txt = i.text.strip()
+                if re.search('Fuente:',txt,re.I):
+                    fuente = txt.split(':')[1].strip()
+                    continue
+                text+=txt+' '
+        ans = text.strip()
+        #ans = ans.text.strip().replace('\n',' ')
         por = soup.find("span",{"class":"extraauthor"})
         if por:
             por = por.get_text()
         title = soup.find('h2',{"class": "title"}).text
         date = soup.find('time')
         date = datetime.strptime(date.attrs['datetime'], '%Y-%m-%d %H:%M:%S')
-        return {'text':ans,'title':title,'img':img, 'author':por,"pub_date":date}
+        return {'text': ans,'title': title,'img': img, 'author': por,"pub_date": date,
+                'img_footer': imgfooter, 'notice_source': fuente}
 
     def _Comment(self, url, proxy):
         return self._extract_comments(url, proxy)
