@@ -1,26 +1,28 @@
 class UnreachebleURL(Exception):
     pass
 
+
 class ProxyConfigError(Exception):
     pass
 
+
 class ScrapBase:
-    def __init__(self,url,proxy=None):
+    def __init__(self, url, proxy=None):
         self.__comment = None
         self.__text = None
         self.__url = url
         self.__proxy = proxy
 
-    def Scrap(self,url,proxy=None):
-        self.__text = self._Scrap(url,proxy)
+    def Scrap(self, url, proxy=None):
+        self.__text = self._Scrap(url, proxy)
 
-    def Comment(self,url,proxy=None):
-        self.__comment = self._Comment(url,proxy)
+    def Comment(self, url, proxy=None):
+        self.__comment = self._Comment(url, proxy)
 
-    def _Scrap(self,url,proxy=None):
+    def _Scrap(self, url, proxy=None):
         raise NotImplementedError
 
-    def _Comment(self,url,proxy=None):
+    def _Comment(self, url, proxy=None):
         raise NotImplementedError
 
     @property
@@ -36,7 +38,7 @@ class ScrapBase:
         if self.__comment:
             return self.__comment
 
-        self.__comment = self._Comment(self.__url,self.__proxy)
+        self.__comment = self._Comment(self.__url, self.__proxy)
 
         return self.__comment
 
@@ -45,7 +47,7 @@ class ScrapBase:
         if self.__text:
             return self.__text
 
-        self.__text = self._Scrap(self.__url,self.__proxy)
+        self.__text = self._Scrap(self.__url, self.__proxy)
 
         return self.__text
 

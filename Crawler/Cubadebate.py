@@ -20,12 +20,9 @@ import logging
 from datetime import datetime
 
 logger = logging.getLogger('scrapper')
-logging.basicConfig(level=logging.DEBUG)
 
 sps = re.compile('  +')
 comm = re.compile('comment')
-#attach = re.compile("^attachment")
-#authorsplit = re.compile('[Pp]or *?\:')
 
 class CubaDebate(ScrapBase):
 
@@ -198,4 +195,4 @@ class CubaDebate(ScrapBase):
 
     @staticmethod
     def can_crawl(url):
-        return 'cubadebate' in url.lower()
+        return 'cubadebate.cu' in url.lower()

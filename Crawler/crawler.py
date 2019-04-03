@@ -2,20 +2,23 @@ import re
 #import auth
 from bs4 import BeautifulSoup
 try:
-    from .Scrapper import CubaDebate
-except (ModuleNotFoundError,ImportError):
-    from Scrapper import CubaDebate
+    from .Cubadebate import CubaDebate
+    from .Granma import Granma
+except (ModuleNotFoundError, ImportError):
+    from Cubadebate import CubaDebate
+    from Granma import Granma
 import logging
 import requests
 
 
 logger = logging.getLogger('crawler')
 
-dic = {'cubadebate' : CubaDebate}
+dic = {'cubadebate': CubaDebate, 'granma': Granma}
+
 
 class Crawler:
-    def __init__(self,config={}):
-        if isinstance(config,dict):
+    def __init__(self, config={}):
+        if isinstance(config, dict):
             if "proxy" in config:
                 self.__proxy = {
                     'http': config["proxy"],
@@ -43,7 +46,7 @@ class Crawler:
             return self.__scrapper._Source()
         return None
 
-    def request(self,url):
+    def request(self, url):
         self.__scrapper = None
         for scrapper in dic.values():
             if scrapper.can_crawl(url):

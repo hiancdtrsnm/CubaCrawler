@@ -1,3 +1,4 @@
 from .crawler import Crawler
-from .Scrapper import CubaDebate
+from .Cubadebate import CubaDebate
+from .Granma import Granma
 from .ScrapBase import UnreachebleURL, ProxyConfigError

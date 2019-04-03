@@ -1,6 +1,9 @@
 from Crawler.crawler import Crawler
 from Crawler import UnreachebleURL
-from auth import config
+#from auth import config
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 #config = {
 #    "proxy": "http://user:password@proxy.host:port"
@@ -29,9 +32,12 @@ c = Crawler()
 #print(text)
 #print(comment)
 try:
-    c.request('http://127.0.0.1:9000/test.html')
+    c.request('http://www.granma.cu/cuba/2019-04-01/accidente-masivo-en-ciego-de-avila-dejo-saldo-de-17-lesionados-01-04-2019-12-04-05')
     text = c.data
+    print(text)
     comment = c.comment
     print(len(comment))
+    for i in comment:
+        print(i)
 except UnreachebleURL as e:
     print(e)
