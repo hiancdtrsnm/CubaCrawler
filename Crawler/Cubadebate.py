@@ -139,10 +139,10 @@ class CubaDebate(ScrapBase):
                     tt['date'] = self._convert_to_datetime(j.get_text().strip())
             comments.append(tt)
 
-        new_request = comments_section.find(
-            'a', attrs={'class': 'pscroll_next'})
+        new_request = soup.find(
+            'a', attrs={'class': 'next'})
         while new_request != None:  # comprobar obtener mas comentarios
-            new_url = new_request.get('data-href')
+            new_url = new_request.get('href')
             new_html = self._request_html(new_url, proxy)
             new_soup = BeautifulSoup(new_html, 'lxml')
             proc_com = new_soup.find_all(
@@ -162,7 +162,7 @@ class CubaDebate(ScrapBase):
                         tt['date'] = self._convert_to_datetime(j.get_text().strip())
                 comments.append(tt)
             new_request = new_soup.find(
-                'a', attrs={'class': 'pscroll_next'})
+                'a', attrs={'class': 'next'})
 
         return comments
 
