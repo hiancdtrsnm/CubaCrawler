@@ -1,10 +1,10 @@
 
 Todo:
-  ☐ Autores
+  ✔ Autores @done(19-07-30 10:46)
   ✔ Título @done(18-09-28 16:43)
   ✔ Comentarios(fecha) @done(18-09-28 06:43)
   ✔ Comentarios(texto) @done(18-09-27 16:16)
-  ☐ Fecha(de publicación)
+  ✔ Fecha(de publicación) @done(19-07-30 10:45)
   ✔ Texto @done(18-09-27 16:16)
-  ☐ Separar proxy `http` y `https`
-  ☐ Generate a requirements.txt
+  ✔ Separar proxy `http` y `https` @done(19-07-30 10:46)
+  ✔ Generate a requirements.txt @done(19-07-30 10:46)

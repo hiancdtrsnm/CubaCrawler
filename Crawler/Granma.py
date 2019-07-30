@@ -32,7 +32,7 @@ class Granma(ScrapBase):
         self.__html_text = None
 
     def _Source(self):
-        return "CubaDebate"
+        return "Granma"
 
     def _request_html(self, url, proxy):
         # logger.debug('_request_html {}, {}'.format(url, proxy))
