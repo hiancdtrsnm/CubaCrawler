@@ -1,3 +1,7 @@
+import re
+
+corchet = re.compile(r'\[[^)]*\]')
+parents = re.compile(r'\([^)]*\)')
 class UnreachebleURL(Exception):
     pass
 
@@ -48,6 +52,10 @@ class ScrapBase:
             return self.__text
 
         self.__text = self._Scrap(self.__url, self.__proxy)
+        text = self.__text['text']
+        text = parents.sub('', text)
+        text = corchet.sub('', text)
+        self.__text['text'] = text
 
         return self.__text
 

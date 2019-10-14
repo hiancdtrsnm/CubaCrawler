@@ -32,7 +32,7 @@ c = Crawler()
 #print(text)
 #print(comment)
 try:
-    c.request('http://www.granma.cu/cuba/2019-04-01/accidente-masivo-en-ciego-de-avila-dejo-saldo-de-17-lesionados-01-04-2019-12-04-05')
+    c.request('http://www.cubadebate.cu/noticias/2019/10/14/cuba-avanza-en-la-habilitacion-de-la-tecnologia-4g-lte/#.XaTBdfcpCV4')
     text = c.data
     print(text)
     comment = c.comment
