@@ -19,7 +19,7 @@ import re
 import logging
 from datetime import datetime
 
-logger = logging.getLogger('scrapper')
+logger = logging.getLogger(__name__)
 
 sps = re.compile('  +')
 comm = re.compile('comment')
@@ -28,47 +28,18 @@ class CubaDebate(ScrapBase):
 
     def __init__(self,url,proxy=None):
         super().__init__(url,proxy)
-        self.__html_text = None
+        self._html_text = None
 
     def _Source(self):
         return "CubaDebate"
-
-    def _request_html(self, url, proxy):
-        # logger.debug('_request_html {}, {}'.format(url, proxy))
-        try:
-            response = requests.get(url, proxies=proxy, timeout=10)
-        except Exception as e:
-            # logger.debug(e)
-            if isinstance(e, LocationParseError):
-                try:
-                    response = requests.get(url, proxies=proxy['http'], timeout=10)
-                except Exception as e:
-                    if isinstance(e, LocationParseError):
-                        logger.debug(e)
-                        raise ProxyConfigError(e.args[0])
-                    logger.debug(e)
-                    raise UnreachebleURL(e.args[0])
-            else:
-                logger.debug(e)
-                raise UnreachebleURL(e.args[0])
-        # logger.debug(response)
-        response.encoding = 'utf-8'
-        if response.status_code != 200:
-            logger.debug("bad response estatus")
-            raise Exception("received code = %d" % response.status_code)
-        return response.text
 
     def _Scrap(self, url, proxy):
         """
         Search for div with class:note_content and delete footnotes in order to have
         only the desired new text
         """
-        #logger.debug('_Scrap params {}, {}'.format(url,proxy))
-        if self.__html_text is None:
-            self.__html_text = self._request_html(url, proxy)
-        #logger.debug(html_text)
 
-        soup = BeautifulSoup(self.__html_text, 'lxml')
+        soup = BeautifulSoup(self._html_text, 'lxml')
         img = None
         ans = soup.find("div", {"class": "note_content"})
         img = ans.find("img")
@@ -109,9 +80,7 @@ class CubaDebate(ScrapBase):
         Retorna una lista de diccionarios que contienen el texto
         de los comentarios y la fecha en que se hicieron.
         """
-        if self.__html_text is None:
-            self.__html_text = self._request_html(url, proxy)
-        soup = BeautifulSoup(self.__html_text, 'lxml')
+        soup = BeautifulSoup(self._html_text, 'lxml')
 
         # buscar la seccion de los comentarios
         comments_section = soup.find('section', id='comments')

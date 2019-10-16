@@ -32,7 +32,7 @@ c = Crawler()
 #print(text)
 #print(comment)
 try:
-    c.request('http://www.cubadebate.cu/noticias/2019/10/14/cuba-avanza-en-la-habilitacion-de-la-tecnologia-4g-lte/#.XaTBdfcpCV4')
+    c.request('http://www.granma.cu/cuba/2019-10-12/universidad-de-la-habana-eleva-su-prestigio-en-la-region-12-10-2019-00-10-34')
     text = c.data
     print(text)
     comment = c.comment
