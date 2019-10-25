@@ -11,7 +11,6 @@ parents = re.compile(r'\([^)]*\)')
 class UnreachebleURL(Exception):
     pass
 
-
 class ProxyConfigError(Exception):
     pass
 
