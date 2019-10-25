@@ -1,12 +1,13 @@
 # CubaCrawler
 
 Esta biblioteca apunta a obtener información de los sitios de
-noticias cubanas (Ahora mismo solo funciona [Cubadebate](http://www.cubadebate.cu/)).
+noticias cubanas (Ahora mismo solo funcionan [Cubadebate](http://www.cubadebate.cu/) y
+[Granma](http://www.granma.cu/)).
 
 ## Como se usa
 
 ```python
-from Crawler import Crawler
+from CubaCrawler import Crawler
 
 data = Crawler()
 
@@ -18,7 +19,7 @@ print(data.comment)
 En caso de tener que pasar por un proxy se puede usar de la siguiente manera
 
 ```python
-from Crawler import Crawler
+from CubaCrawler import Crawler
 
 config = {
     "proxy": "http://user:password@proxy.host:port"
@@ -33,7 +34,7 @@ print(data.comment)
 O, se pude llamar explicitamente a un Scrapper
 
 ```python
-from Crawler import Cubadebate
+from CubaCrawler import Cubadebate
 
 url = "http://www.cubadebate.cu/noticias/2018/09/26/fundada-la-primera-empresa-biotecnologica-cubano-estadounidense-innovative-immunotherapy-alliance-sa/#.W6uvSBQpDeM"
 cubadebate = Cubadebate(url)
@@ -46,4 +47,8 @@ Esta biblioteca es desarrollada por GIA (Grupo de Inteligencia Artificial), cual
 
 thanks,
 
-            los autores
+Frank Sadan Naranjo Noda <fsadannn@gmail.com>
+
+Hian Cañizares Díaz <hiancdtrsnm@gmail.com>
+
+[License](LICENSE)

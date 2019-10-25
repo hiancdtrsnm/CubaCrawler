@@ -1,5 +1,10 @@
 *.pyc
 .vscode
-auth.py
-data_test
+__pycache__
+test.py
 .directory
+coverage.xml
+.coverage
+.directory
+build
+compose_manager.egg-info

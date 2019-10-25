@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+pylint = "*"
+codecov = "*"
+pylint-exit = "*"
+mock = "*"
+
+[packages]
+toml = "*"
+beautifulsoup4 = "*"
+bs4 = "*"
+lxml = "*"
+requests = "*"
