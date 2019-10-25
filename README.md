@@ -1,3 +1,4 @@
+<img alt="PyPI - License" src="https://img.shields.io/pypi/l/CubaCrawler.svg"> <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/CubaCrawler.svg"> <img alt="PyPI" src="https://img.shields.io/pypi/v/CubaCrawler.svg"> <img alt="Travis (.org)" src="https://img.shields.io/travis/apiad/CubaCrawler/master.svg"> <img alt="Codecov" src="https://img.shields.io/codecov/c/github/apiad/CubaCrawler.svg">
 # CubaCrawler
 
 Esta biblioteca apunta a obtener información de los sitios de
@@ -50,5 +51,3 @@ thanks,
 Frank Sadan Naranjo Noda <fsadannn@gmail.com>
 
 Hian Cañizares Díaz <hiancdtrsnm@gmail.com>
-
-[License](LICENSE)
