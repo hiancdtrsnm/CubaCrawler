@@ -1,5 +1,5 @@
 # coding: utf8
-
+import CubaCrawler
 """ Pending to write
 """
 

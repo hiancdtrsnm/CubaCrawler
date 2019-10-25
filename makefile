@@ -1,7 +1,7 @@
 .PHONY: build clean install test lint cov
 
 # TODO: Update your project folder
-PROJECT=compose_manager
+PROJECT=CubaCrawler
 
 build:
 	pipenv run python setup.py sdist bdist_wheel

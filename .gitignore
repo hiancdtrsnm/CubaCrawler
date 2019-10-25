@@ -7,4 +7,4 @@ coverage.xml
 .coverage
 .directory
 build
-compose_manager.egg-info
+CubaCrawler.egg-info
